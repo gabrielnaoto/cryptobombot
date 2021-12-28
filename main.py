@@ -1,7 +1,14 @@
-import pyautogui
+from controller.worker import Worker
+import time
 
-# This is the base script to locate and click a image in the screen
-location = pyautogui.locateOnScreen('image.png', confidence=0.75)
-point = pyautogui.center(location)
-x, y = point
-pyautogui.click(x, y)
+def main():
+    worker = Worker()
+    while True:
+        try:
+            worker.execute()
+            time.sleep(10) # meaning that the worker will put all workers to work each 10 secs
+        except Exception:
+            worker.restart()
+
+if __name__ == "__main__":
+    main()
