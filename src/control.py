@@ -1,5 +1,8 @@
 import pyautogui
 
+class NeedsRestartException(Exception):
+    pass
+
 class Control(object):
     objects = {}
 
@@ -12,11 +15,14 @@ class Control(object):
     def click(self, name, action='click'):
         image = self.objects.get(name)
         if image is not None:
-            location = pyautogui.locateOnScreen(image, confidence=0.75)
+            location = pyautogui.locateOnScreen(image, confidence=0.5)
             if location is not None:
                 x, y = pyautogui.center(location)
                 exec(f'pyautogui.{action}(x, y)')
             else:
-                print('The image was not found')
+                if name != 'start':
+                    raise NeedsRestartException
+                else:
+                    print('The image was not found')
         else:
             print('The image was not provided')
